@@ -1,7 +1,8 @@
 <template>
     <div ref="parent" class="gamemap">
-        <canvas ref="canvas"></canvas>
+        <canvas ref="canvas" tabindex="0"></canvas> 
     </div>
+    <!-- tabindex 属性 可以使canvas对象拥有键盘操作的功能 -->
 </template>
 
 <script>
@@ -11,8 +12,10 @@ export default{
     setup(){
         let parent = ref(null);
         let canvas = ref(null);
+        // 当前页面挂载完毕之后 创建一个游戏地图
         onMounted(() => {
             new GameMap(canvas.value.getContext('2d'),parent.value);
+            
         });
         return {
             parent,canvas

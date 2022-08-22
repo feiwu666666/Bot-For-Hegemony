@@ -1,7 +1,6 @@
 const AC_GAME_OBJECTS = [];
 
 
-
 export class AcGameObject{
     constructor(){
         AC_GAME_OBJECTS.push(this);
@@ -45,5 +44,4 @@ const step = timestamp =>{
     last_timestamp = timestamp;
     requestAnimationFrame(step);
 }
-
 requestAnimationFrame(step);

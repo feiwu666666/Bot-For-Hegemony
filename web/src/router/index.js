@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import PkIndexView from '../views/pk/PkIndexView'
-import NotFound from '../views/error/NotFound'
-import RanklistIndexView from '../views/ranklist/RanklistIndexView'
-import RecordIndexView from '../views/record/RecordIndexView'
-import UserBotIndexView from '../views/user/bot/UserBotIndexView'
+import PkIndexView from '../views/pk/PkIndexView.vue'
+import NotFound from '../views/error/NotFound.vue'
+import RanklistIndexView from '../views/ranklist/RanklistIndexView.vue'
+import RecordIndexView from '../views/record/RecordIndexView.vue'
+import UserBotIndexView from '../views/user/bot/UserBotIndexView.vue'
 
 const routes = [
   {

@@ -44,7 +44,7 @@ import { useRoute } from 'vue-router';
 import { computed } from 'vue';
 export default{
     setup(){
-        const route = useRoute();  // 去除当前route
+        const route = useRoute();  // 取出当前route
         let route_name = computed(() => route.name) // 实时获取当前route的name值
         return {
             route_name
