@@ -6,47 +6,72 @@ import RecordIndexView from '../views/record/RecordIndexView.vue'
 import UserBotIndexView from '../views/user/bot/UserBotIndexView.vue'
 import UserAccountRegisterView from '../views/user/account/UserAccountRegisterView'
 import UserAccountLoginView from '../views/user/account/UserAccountLoginView'
+import store from '@/store'
 
 const routes = [
   {
     path:'/',
     name:"home",
-    redirect:"/pk/"
+    redirect:"/pk/",
+    meta: {
+      requestAuth: true
+    }
   },
   {
     path:"/pk/",
     name:"pk_index",
-    component:PkIndexView
+    component:PkIndexView,
+    meta: {
+      requestAuth: true
+    }
   },
   {
     path:"/record/",
     name:"record_index",
-    component:RecordIndexView
+    component:RecordIndexView,
+    meta: {
+      requestAuth: true
+    }
   },
   {
     path:"/ranklist/",
     name:"ranklist_index",
-    component:RanklistIndexView
+    component:RanklistIndexView,
+    meta: {
+      requestAuth: true
+    }
   },
   {
     path:"/user/bot/",
     name:"user_bot_index",
-    component:UserBotIndexView
+    component:UserBotIndexView,
+    meta: {
+      requestAuth: true
+    }
   },
   {
     path:"/user/account/login/",
     name:"user_account_login",
-    component: UserAccountLoginView
+    component: UserAccountLoginView,
+    meta: {
+      requestAuth: false
+    }
   },
   {
     path:"/user/account/register/",
     name:"user_account_register",
-    component:UserAccountRegisterView
+    component:UserAccountRegisterView,
+    meta: {
+      requestAuth: false
+    }
   },
   {
     path:"/404/",
     name:"404_index",
-    component:NotFound
+    component:NotFound,
+    meta: {
+      requestAuth: false
+    }
   },
   {
     path:"/:catchAll(.*)",
@@ -59,5 +84,16 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+// router在起作用之前执行的函数
+// 每次通过router进入某个页面之前，会调用beforEach函数 to: 跳转到某个画面 from：从哪个页面跳转过来 next: 将页面是否执行下一步操作
+router.beforeEach((to, from,next) => {
+  if(to.meta.requestAuth && !store.state.user.is_login){  // 如果去往的页面需要授权并且用户并未登录  则去往登录页面
+    next({name: "user_account_login"});
+  }else{
+    next();
+  }
+
+})
+
 
 export default router

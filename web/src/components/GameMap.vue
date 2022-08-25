@@ -1,5 +1,5 @@
 <template>
-    <div ref="parent" class="gamemap">
+    <div ref="parent" class="gamemap" >
         <canvas ref="canvas" tabindex="0"></canvas> 
     </div>
     <!-- tabindex 属性 可以使canvas对象拥有键盘操作的功能 -->

@@ -72,10 +72,9 @@ public class RegisterServiceImpl implements RegisterService {
         // 创建一个user
         User user = new User(null,username,encode,photo);
         // 将user插入到数据库中
-        System.out.println("插入成功!!!!!");
         userMapper.insert(user);
 
-        map.put("error_message","注册成功");
+        map.put("error_message","success");
         return map;
 
     }
