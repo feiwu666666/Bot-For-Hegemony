@@ -8,6 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+
+/**
+ * 用户权限设置
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

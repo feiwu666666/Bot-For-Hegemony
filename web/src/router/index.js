@@ -4,6 +4,8 @@ import NotFound from '../views/error/NotFound.vue'
 import RanklistIndexView from '../views/ranklist/RanklistIndexView.vue'
 import RecordIndexView from '../views/record/RecordIndexView.vue'
 import UserBotIndexView from '../views/user/bot/UserBotIndexView.vue'
+import UserAccountRegisterView from '../views/user/account/UserAccountRegisterView'
+import UserAccountLoginView from '../views/user/account/UserAccountLoginView'
 
 const routes = [
   {
@@ -32,6 +34,16 @@ const routes = [
     component:UserBotIndexView
   },
   {
+    path:"/user/account/login/",
+    name:"user_account_login",
+    component: UserAccountLoginView
+  },
+  {
+    path:"/user/account/register/",
+    name:"user_account_register",
+    component:UserAccountRegisterView
+  },
+  {
     path:"/404/",
     name:"404_index",
     component:NotFound
@@ -39,7 +51,8 @@ const routes = [
   {
     path:"/:catchAll(.*)",
     redirect:'/404/'
-  }
+  },
+
 ]
 
 const router = createRouter({

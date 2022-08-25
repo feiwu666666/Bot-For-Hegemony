@@ -132,7 +132,7 @@ export class GameMap extends AcGameObject{
      // 判断两条蛇是否都准备好了进入下一回合
     check_ready(){
         for(let snake of this.snakes){
-            if(snake.status !== 'idle') return false;  // 状态不为idle时  不再进行操作 
+            if(snake.status !== 'idle') return false;  // 状态不为idle时  不再进行操作    
             if(snake.direction === -1) return false;
         }
         return true;
