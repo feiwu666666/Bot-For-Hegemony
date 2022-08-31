@@ -16,6 +16,7 @@ public class GetListController {
 
     @GetMapping("/user/bot/getlist/")
     public List<Bot> getlist(){
+        System.out.println("进入服务");
         return getListService.getList();
     }
 

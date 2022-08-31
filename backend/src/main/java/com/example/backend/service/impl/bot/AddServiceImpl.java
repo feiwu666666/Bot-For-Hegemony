@@ -68,7 +68,7 @@ public class AddServiceImpl implements AddService {
 
         botMapper.insert(bot);
 
-        map.put("error_message","添加成功");
+        map.put("error_message","success");
         return map;
 
     }
