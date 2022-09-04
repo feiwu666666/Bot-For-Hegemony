@@ -1,6 +1,7 @@
 <template>
     <PlayGround v-if="$store.state.pk.status === 'playing'" />
     <MatchGround v-if="$store.state.pk.status === 'matching'" />
+    <ResultBoard v-if="$store.state.pk.loser !== 'none'" />
 </template>
 
 <script>
@@ -8,12 +9,13 @@ import { onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex'
 import PlayGround from '../../components/PlayGround.vue'
 import MatchGround from '../../components/MatchGround.vue';
-
+import ResultBoard from '../../components/ResultBoard.vue'
 
 export default{
     components:{
     PlayGround,
-    MatchGround
+    MatchGround,
+    ResultBoard,
 },
     setup(){
         const store = useStore();
@@ -35,7 +37,7 @@ export default{
 
             socket.onmessage = msg => {
                 const data = JSON.parse(msg.data);
-                if(data.event === 'start-matching'){
+                if(data.event === 'start-matching'){ // 匹配成功
                     store.commit("updateOpponent",{
                         username:data.opponent_username,
                         photo: data.opponent_photo,
@@ -43,10 +45,30 @@ export default{
                     setTimeout( () => {
                         store.commit("updateStatus","playing")
                     },2000); // 匹配成功之后改变status状态  显示pk界面  两秒之后显示pk界面
-                    store.commit("updateGamemap",data.gamemap);
+                    store.commit("updateGame",data.game);
+                    
+                }else if(data.event === "move"){
+                    console.log(data);
+                    const game = store.state.pk.gameobject;
+                    const [snake0,snake1] = game.snakes;
+                    snake0.set_direction(data.a_direction);
+                    snake1.set_direction(data.b_direction);
+                    
+                }else if(data.event === "result"){
+                    console.log(data);
+                    const game = store.state.pk.gameobject;
 
+                    const [snake0,snake1] = game.snakes;
+
+                    if(data.loser === "all" || data.loser === "A"){
+                        snake0.status ="die";
+                    }
+                    if(data.loser ==="all" || data.loser === "B"){
+                        snake1.status = "die";
+                    }
+                    store.commit("updateLoser",data.loser); 
                 }
-                console.log(data);
+                
             }
             socket.onclose = () => {
                 console.log("断开");

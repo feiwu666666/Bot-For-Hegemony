@@ -14,7 +14,7 @@
         <div class="uesr-username">{{ $store.state.pk.opponent_username }}</div>
       </div>
       
-      <div class="col-12" style="text-align: center; margin-top: 10vh">
+      <div class="col-12" style="text-align: center; margin-top: 15vh">
         <button
           @click="click_match_btn"
           class="btn btn-warning btn-lg"

@@ -58,9 +58,9 @@ export class Snake extends AcGameObject{
         for(let i = k ; i > 0; i --){
             this.cells[i] = JSON.parse(JSON.stringify(this.cells[i-1])); // 遍历cells 将每个cell向后推一位
         }
-        if(!this.gamemap.check_valid(this.next_cell)){
-            this.status = 'die';
-        }
+        // if(!this.gamemap.check_valid(this.next_cell)){
+        //     this.status = 'die';
+        // }
     }
     check_tail_increasing(){ // 检测当前回合，蛇的长度是否增加
         if(this.step <= 10) return true; // 前十步  每走一步蛇增加一个长度

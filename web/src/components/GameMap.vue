@@ -16,7 +16,7 @@ export default{
         let canvas = ref(null);
         // 当前页面挂载完毕之后 创建一个游戏地图
         onMounted(() => {
-            new GameMap(canvas.value.getContext('2d'),parent.value,store);
+            store.commit("updateGameObject", new GameMap(canvas.value.getContext('2d'),parent.value,store));
             
         });
         return {
