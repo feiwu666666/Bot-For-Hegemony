@@ -35,7 +35,7 @@ export default({
     }
 
   },
-  // 修改state数据一般存在action中
+  // 请求数据一般存在action中
   actions: {
     login(context,data){
         $.ajax({

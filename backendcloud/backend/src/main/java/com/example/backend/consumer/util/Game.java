@@ -152,8 +152,13 @@ public class Game extends Thread{
     }
 
     private void sendAllMessage(String message){
-        WebSocketServer.users.get(playerA.getId()).sendMessage(message);
-        WebSocketServer.users.get(playerB.getId()).sendMessage(message);
+        if (WebSocketServer.users.get(playerA.getId()) != null) {
+            WebSocketServer.users.get(playerA.getId()).sendMessage(message);
+        }
+        if (WebSocketServer.users.get(playerB.getId()) != null) {
+            WebSocketServer.users.get(playerB.getId()).sendMessage(message);
+        }
+
     }
     private void sendMove(){   // 向两个client发送移动信息
         // 由于要用到nextstepa、b元素  所以要加锁

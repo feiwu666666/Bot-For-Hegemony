@@ -16,9 +16,10 @@ export default{
     PlayGround,
     MatchGround,
     ResultBoard,
-},
+    },
     setup(){
         const store = useStore();
+        // 访问后端3000 端口  websocket服务
         const socketUrl = `ws://127.0.0.1:3000/websocket/${store.state.user.token}/`;
 
         let socket = null;

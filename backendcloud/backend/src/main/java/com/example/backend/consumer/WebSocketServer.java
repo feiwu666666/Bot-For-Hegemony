@@ -9,6 +9,9 @@ import com.example.backend.mapper.UserMapper;
 import com.example.backend.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -31,17 +34,22 @@ public class WebSocketServer {
 
     // 维护线程安全的线程池  当作匹配池
 
-    final private static CopyOnWriteArrayList matchpool = new CopyOnWriteArrayList();
 
     private User user;
 
     private Game game = null;
     private Session session = null;
 
+    // 定义传给匹配系统服务的链接
+    private final static String addPlayerUrl = "http://127.0.0.1:3001/player/add/";
+    private final static String removePlayerUrl = "http://127.0.0.1:3001/player/remove/";
+
+
     // 由于WebSocketServer不是spring中的类库（非单例模式）,所以不能直接注入
     /**
      * 非单例模式下 注入Mapper的方法
      */
+    private static RestTemplate restTemplate;
     private static UserMapper userMapper;
     public static RecordMapper recordMapper;
     @Autowired
@@ -54,6 +62,11 @@ public class WebSocketServer {
     };
     // 用session维护前端传来的链接
 
+    // 与另一个微服务通信
+    @Autowired
+    public void setRestTemplate(RestTemplate restTemplate){
+        WebSocketServer.restTemplate = restTemplate;
+    }
 
 
 
@@ -80,62 +93,79 @@ public class WebSocketServer {
         System.out.println("close");
         if(this.user != null){
             users.remove(this.user);
-            matchpool.remove(this.user);
         }
 
     }
 
-    private void startMatching(){
-        System.out.println("start");
-        matchpool.add(this.user);
+    public static void startGame(Integer aId,Integer bId){
+        User a = userMapper.selectById(aId);
+        User b = userMapper.selectById(bId);
+
+        Game game = new Game(13,14,20,a.getId(),b.getId());
+        game.createGameMap();
+        // 如果玩家在匹配中途退出了匹配 users。get的结果为空 需要特判
 
 
-        while(matchpool.size() >= 2){
-            // 创建一个迭代器，迭代存储线程池中的用户
-            Iterator<User> it = matchpool.iterator();
-            User a = it.next(),b = it.next();
-            matchpool.remove(a);
-            matchpool.remove(b);
-            // 创建地图
-            Game game = new Game(13,14,20,a.getId(),b.getId());
-            game.createGameMap();
+        if(users.get(a.getId()) != null){
             users.get(a.getId()).game = game;
+        }
+        if(users.get(b.getId()) != null){
             users.get(b.getId()).game = game;
+        }
 
-            game.start();
-            JSONObject respGame = new JSONObject();
-            respGame.put("a_id",game.getPlayerA().getId());
-            respGame.put("a_sx",game.getPlayerA().getSx());
-            respGame.put("a_sy",game.getPlayerA().getSy());
-            respGame.put("b_id",game.getPlayerB().getId());
-            respGame.put("b_sx",game.getPlayerB().getSx());
-            respGame.put("b_sy",game.getPlayerB().getSy());
-            respGame.put("gamemap",game.getG());
+        game.start();
+        JSONObject respGame = new JSONObject();
+        respGame.put("a_id",game.getPlayerA().getId());
+        respGame.put("a_sx",game.getPlayerA().getSx());
+        respGame.put("a_sy",game.getPlayerA().getSy());
+        respGame.put("b_id",game.getPlayerB().getId());
+        respGame.put("b_sx",game.getPlayerB().getSx());
+        respGame.put("b_sy",game.getPlayerB().getSy());
+        respGame.put("gamemap",game.getG());
 
-            // 匹配成功之后 将双方信息发送给前端
+        // 匹配成功之后 将双方信息发送给前端
 
-            JSONObject respA = new JSONObject();
-            respA.put("event","start-matching");
-            respA.put("opponent_username",b.getUsername());
-            respA.put("opponent_photo",b.getPhoto());
-            respA.put("game",respGame);
+        JSONObject respA = new JSONObject();
+        respA.put("event","start-matching");
+        respA.put("opponent_username",b.getUsername());
+        respA.put("opponent_photo",b.getPhoto());
+        respA.put("game",respGame);
+        if(users.get(a.getId()) != null){
             users.get(a.getId()).sendMessage(respA.toJSONString());
+        }
 
-            JSONObject respB = new JSONObject();
-            respB.put("event","start-matching");
-            respB.put("opponent_username",a.getUsername());
-            respB.put("opponent_photo",a.getPhoto());
-            respB.put("game",respGame);
+        JSONObject respB = new JSONObject();
+        respB.put("event","start-matching");
+        respB.put("opponent_username",a.getUsername());
+        respB.put("opponent_photo",a.getPhoto());
+        respB.put("game",respGame);
+        if(users.get(b.getId()) != null){
             users.get(b.getId()).sendMessage(respB.toJSONString());
         }
     }
+
+
+
+    private void startMatching(){
+        System.out.println("start");
+        MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
+
+        // 将匹配系统需要用到的信息传给匹配系统云服务
+
+        data.add("user_id",this.user.getId().toString());
+        data.add("rating",this.user.getRating().toString());
+
+        restTemplate.postForObject(addPlayerUrl,data,String.class);
+    }
     private void stopMatching(){
         System.out.println("stop");
-        matchpool.remove(this.user);
+        MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
+        data.add("user_id",this.user.getId().toString());
+        restTemplate.postForObject(removePlayerUrl,data,String.class);
     }
 
     private void move(int direction){  // 设置方向
-        if(game.getPlayerA().getId().equals(this.user.getId())){  // 判断当前蛇是哪一方
+        if(game.getPlayerA().getId().equals(this.user.getId())){     // 判断当前蛇是哪一方
             game.setNextStepA(direction);
         }else if(game.getPlayerB().getId().equals(this.user.getId())){
             game.setNextStepB(direction);
@@ -168,7 +198,10 @@ public class WebSocketServer {
         synchronized (this.session){
             try{
                 // 将当前message发送到当前绑定的session中，即向前端发送信息
-                this.session.getBasicRemote().sendText(message);
+                if(session.isOpen()){
+                    this.session.getBasicRemote().sendText(message);
+
+                }
             }catch (IOException e){
                 e.printStackTrace();
             }
