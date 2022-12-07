@@ -1,3 +1,10 @@
+/*
+ * @Author: Cyan_Breeze
+ * @Description:
+ * @Date: 2022-09-20 22:18:21
+ * @LastEditTime: 2022-12-05 09:06:45
+ * @FilePath: \web\src\router\index.js
+ */
 import { createRouter, createWebHistory } from 'vue-router'
 import PkIndexView from '../views/pk/PkIndexView.vue'
 import NotFound from '../views/error/NotFound.vue'
@@ -84,6 +91,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+// 路由守卫
 // router在起作用之前执行的函数
 // 每次通过router进入某个页面之前，会调用beforEach函数 to: 跳转到某个画面 from：从哪个页面跳转过来 next: 将页面是否执行下一步操作
 router.beforeEach((to, from,next) => {

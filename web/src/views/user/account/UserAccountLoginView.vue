@@ -1,15 +1,22 @@
+<!--
+ * @Author: Cyan_Breeze
+ * @Description:
+ * @Date: 2022-09-20 22:18:21
+ * @LastEditTime: 2022-12-05 13:13:23
+ * @FilePath: \web\src\views\user\account\UserAccountLoginView.vue
+-->
 <template>
     <ContentField v-if="!$store.state.user.pulling_info">
         <div class="row justify-content-md-center">
             <div class="col-3">
-                <form @submit.prevent = "login">
+                <form @submit.prevent = "login" id="account-login">
                     <div class="mb-3">
                         <label for="username" class="form-label">用户名</label>
-                        <input type="text" v-model="username" class="form-control" id="username" placeholder="请输入用户名">
+                        <input type="text" v-model="username" class="form-control" id="username" name="username" placeholder="请输入用户名">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">密码</label>
-                        <input type="password" v-model="password" class="form-control" id="password" placeholder="请输入密码">
+                        <input type="password" v-model="password" class="form-control" id="password" name="password" placeholder="请输入密码">
                     </div>
                     <div class="error_message">{{ error_message }}</div>
                     <button type="submit" class="btn btn-success">登录</button>
@@ -21,7 +28,7 @@
     </ContentField>
 </template>
 <script>
-import ContentField from '@/components/ContentField.vue'
+import ContentField from '@/base-ui/content-field'
 import { useStore } from 'vuex';
 import { ref } from 'vue';
 import router from '@/router';
@@ -36,7 +43,6 @@ export default{
         let username = ref('');
         let password = ref('');
         let error_message = ref('');
-
         const jwt_token = localStorage.getItem("jwt_token");
         if(jwt_token){
             store.commit("updateToken",jwt_token);
@@ -64,7 +70,7 @@ export default{
                         success(){
                             // 登陆成功之后，获取用户信息之后  自动跳转至'Home'页面
                             router.push({name: 'home'})
-                            console.log(store.state.user)
+                            // console.log(store.state.user)
                         }
                     })
                 },
@@ -83,7 +89,7 @@ export default{
 
 <style scoped>
 .btn{
-    width:100%; 
+    width:100%;
 }
 .error_message{
     color:red;

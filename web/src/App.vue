@@ -1,3 +1,10 @@
+<!--
+ * @Author: Cyan_Breeze
+ * @Description:
+ * @Date: 2022-09-20 22:18:21
+ * @LastEditTime: 2022-12-05 08:59:23
+ * @FilePath: \web\src\App.vue
+-->
 <template>
   <NavBar/>
   <router-view></router-view>
@@ -5,7 +12,7 @@
 
 
 <script>
-import NavBar from './components/NavBar.vue';
+import NavBar from '@/base-ui/navbar';
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap"
 // import $ from 'jquery'
@@ -27,7 +34,7 @@ export default{
 //       error(resp){
 //         console.log(resp);
 //       }
-//     }); 
+//     });
 //     $.ajax({
 //       url: "http://127.0.0.1:3000/user/account/info/",
 //       type: 'get',

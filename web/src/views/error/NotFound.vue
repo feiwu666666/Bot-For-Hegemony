@@ -2,7 +2,7 @@
     <ContentField>404</ContentField>
 </template>
 <script>
-import ContentField from '../../components/ContentField.vue'
+import ContentField from '@/base-ui/content-field'
 export default{
     components:{
         ContentField

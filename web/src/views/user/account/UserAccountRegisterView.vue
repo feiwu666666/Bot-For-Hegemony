@@ -23,7 +23,7 @@
     </ContentField>
 </template>
 <script>
-import ContentField from '@/components/ContentField.vue'
+import ContentField from '@/base-ui/content-field'
 import { ref } from 'vue';
 import router from '@/router';
 import $ from 'jquery'

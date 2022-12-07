@@ -1,3 +1,10 @@
+<!--
+ * @Author: Cyan_Breeze
+ * @Description:
+ * @Date: 2022-11-24 17:10:28
+ * @LastEditTime: 2022-12-07 00:08:48
+ * @FilePath: \web\src\views\pk\PkIndexView.vue
+-->
 <template>
     <PlayGround v-if="$store.state.pk.status === 'playing'" />
     <MatchGround v-if="$store.state.pk.status === 'matching'" />
@@ -24,6 +31,7 @@ export default{
 
         let socket = null;
 
+
         onMounted(() => {
             store.commit("updateOpponent",{
                 username: "我的对手",
@@ -45,20 +53,19 @@ export default{
                     });
                     setTimeout( () => {
                         store.commit("updateStatus","playing")
+                        store.commit("updateGame",data.game);
                     },2000); // 匹配成功之后改变status状态  显示pk界面  两秒之后显示pk界面
-                    store.commit("updateGame",data.game);
-                    
+
+
                 }else if(data.event === "move"){
-                    console.log(data);
                     const game = store.state.pk.gameobject;
                     const [snake0,snake1] = game.snakes;
                     snake0.set_direction(data.a_direction);
                     snake1.set_direction(data.b_direction);
-                    
-                }else if(data.event === "result"){
-                    console.log(data);
-                    const game = store.state.pk.gameobject;
 
+                }else if(data.event === "result"){
+                    const game = store.state.pk.gameobject;
+                    console.log(game);
                     const [snake0,snake1] = game.snakes;
 
                     if(data.loser === "all" || data.loser === "A"){
@@ -67,9 +74,9 @@ export default{
                     if(data.loser ==="all" || data.loser === "B"){
                         snake1.status = "die";
                     }
-                    store.commit("updateLoser",data.loser); 
+                    store.commit("updateLoser",data.loser);
                 }
-                
+
             }
             socket.onclose = () => {
                 console.log("断开");
@@ -79,6 +86,7 @@ export default{
 
         }),
         onUnmounted(() => {
+          store.commit("updateLoser","none");
             socket.close();
         })
     }

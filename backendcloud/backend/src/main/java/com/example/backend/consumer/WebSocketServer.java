@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.backend.consumer.util.Game;
 import com.example.backend.consumer.util.JwtAuthentication;
+import com.example.backend.mapper.BotMapper;
 import com.example.backend.mapper.RecordMapper;
 import com.example.backend.mapper.UserMapper;
+import com.example.backend.pojo.Bot;
 import com.example.backend.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,7 +39,7 @@ public class WebSocketServer {
 
     private User user;
 
-    private Game game = null;
+    public Game game = null;
     private Session session = null;
 
     // 定义传给匹配系统服务的链接
@@ -49,9 +51,10 @@ public class WebSocketServer {
     /**
      * 非单例模式下 注入Mapper的方法
      */
-    private static RestTemplate restTemplate;
+    public static RestTemplate restTemplate;
     private static UserMapper userMapper;
     public static RecordMapper recordMapper;
+    public static BotMapper botMapper;
     @Autowired
     public void setUserMapper(UserMapper userMapper){
         WebSocketServer.userMapper = userMapper;
@@ -60,6 +63,10 @@ public class WebSocketServer {
     public void setRecordMapper(RecordMapper recordMapper){
         WebSocketServer.recordMapper = recordMapper;
     };
+    @Autowired
+    public void setBotMapper(BotMapper botMapper){
+        WebSocketServer.botMapper = botMapper;
+    }
     // 用session维护前端传来的链接
 
     // 与另一个微服务通信
@@ -74,7 +81,6 @@ public class WebSocketServer {
     public void onOpen(Session session, @PathParam("token") String token) throws IOException {
         // 从前端获取链接信息
         this.session = session;
-        System.out.println("connected!");
         // 建立连接
         Integer userId = JwtAuthentication.getId(token);
         this.user = userMapper.selectById(userId);
@@ -84,24 +90,24 @@ public class WebSocketServer {
         }else{
             this.session.close();  // 如果没有找到token对应的用户  就断开该连接
         }
-        System.out.println(users);
     }
 
     @OnClose
     public void onClose() {
         // 关闭链接
-        System.out.println("close");
         if(this.user != null){
             users.remove(this.user);
         }
 
     }
 
-    public static void startGame(Integer aId,Integer bId){
+    public static void startGame(Integer aId,Integer aBotId,Integer bId, Integer bBotId){
         User a = userMapper.selectById(aId);
         User b = userMapper.selectById(bId);
 
-        Game game = new Game(13,14,20,a.getId(),b.getId());
+        Bot botA = botMapper.selectById(aBotId);
+        Bot botB = botMapper.selectById(bBotId);
+        Game game = new Game(13,14,20,a.getId(),botA,b.getId(),botB);
         game.createGameMap();
         // 如果玩家在匹配中途退出了匹配 users。get的结果为空 需要特判
 
@@ -146,19 +152,18 @@ public class WebSocketServer {
 
 
 
-    private void startMatching(){
-        System.out.println("start");
+    private void startMatching(Integer botId){
         MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
 
         // 将匹配系统需要用到的信息传给匹配系统云服务
 
         data.add("user_id",this.user.getId().toString());
         data.add("rating",this.user.getRating().toString());
-
+        data.add("bot_id",botId.toString());
         restTemplate.postForObject(addPlayerUrl,data,String.class);
     }
     private void stopMatching(){
-        System.out.println("stop");
+
         MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
         data.add("user_id",this.user.getId().toString());
         restTemplate.postForObject(removePlayerUrl,data,String.class);
@@ -166,21 +171,25 @@ public class WebSocketServer {
 
     private void move(int direction){  // 设置方向
         if(game.getPlayerA().getId().equals(this.user.getId())){     // 判断当前蛇是哪一方
-            game.setNextStepA(direction);
+            if(game.getPlayerA().getBotId().equals(-1)){ // botId=-1 亲自出战
+                game.setNextStepA(direction);
+            }
         }else if(game.getPlayerB().getId().equals(this.user.getId())){
-            game.setNextStepB(direction);
+            if(game.getPlayerB().getBotId().equals(-1)){ // botId=-1 亲自出战
+                game.setNextStepB(direction);
+            }
+
         }
 
     }
     @OnMessage
     public void onMessage(String message, Session session) {   //当作路由 用来判断前后端通信内容
         // 从Client接收消息
-        System.out.println("receive message");
 
         JSONObject data = JSON.parseObject(message);
         String event = data.getString("event");
         if("start-matching".equals(event)){
-            startMatching();
+            startMatching(data.getInteger("bot_id"));
         }else if("stop-matching".equals(event)){
             stopMatching();
         }else if("move".equals(event)){

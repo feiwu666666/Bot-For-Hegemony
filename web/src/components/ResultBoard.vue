@@ -1,3 +1,10 @@
+<!--
+ * @Author: Cyan_Breeze
+ * @Description:
+ * @Date: 2022-09-20 22:18:21
+ * @LastEditTime: 2022-12-06 22:52:40
+ * @FilePath: \web\src\components\ResultBoard.vue
+-->
 <template>
     <div class="result-board">
         <div class="result-board-text" v-if="$store.state.pk.loser === 'all'">
@@ -18,7 +25,7 @@
             </button>
         </div>
     </div>
-    
+
 </template>
 
 
@@ -29,6 +36,7 @@ export default{
     setup(){
         const store = useStore();
         const restart = () => {
+          // 重新开局 将失败者、匹配状态、对手信息全部进行初始化
             store.commit("updateLoser","none");
             store.commit("updateStatus","matching");
             store.commit("updateOpponent",{
@@ -40,7 +48,7 @@ export default{
             restart
         };
     }
-    
+
 
 }
 </script>

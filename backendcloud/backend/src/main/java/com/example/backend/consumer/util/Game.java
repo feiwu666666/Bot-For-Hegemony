@@ -2,7 +2,10 @@ package com.example.backend.consumer.util;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.backend.consumer.WebSocketServer;
+import com.example.backend.pojo.Bot;
 import com.example.backend.pojo.Record;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,14 +29,27 @@ public class Game extends Thread{
     private Integer nextStepB = null;
     // 定义一个锁 防止读写冲突
     private ReentrantLock lock  = new ReentrantLock();
+    private final static String addBotUrl = "http://127.0.0.1:3002/bot/add/";
 
-    public Game(Integer rows, Integer cols, Integer inner_walls_count,Integer idA,Integer idB) {
+    public Game(Integer rows, Integer cols, Integer inner_walls_count, Integer idA, Bot botA, Integer idB, Bot botB) {
         this.cols = cols;
         this.rows = rows;
         this.g = new int[rows][cols];
         this.inner_walls_count = inner_walls_count;
-        playerA = new Player(idA,rows-2,1,new ArrayList<>());
-        playerB = new Player(idB,1,cols-2,new ArrayList<>());
+        Integer aBotId = -1, bBotId = -1;
+        String aBotCode = "", bBotCode = "";
+        if(botA != null){
+            aBotId = botA.getId();
+            aBotCode = botA.getContent();
+        }
+
+        if(botB != null ){
+            bBotId = botB.getId();
+            bBotCode  = botB.getContent();
+        }
+
+        playerA = new Player(idA,aBotId,aBotCode, rows-2,1,new ArrayList<>());
+        playerB = new Player(idB,bBotId,bBotCode, 1,cols-2,new ArrayList<>());
     }
     public void setNextStepA(Integer nextStepA){
         lock.lock();
@@ -123,15 +139,53 @@ public class Game extends Thread{
             }
         }
     }
+    // 获取整个地图的所有信息
+    private String getInput(Player player){ // 将当前局面 格式化成字符串
+        // 字符串格式: 地图信息#我的x#我的y#(我的操作序列)#对手的x#对手的y#（对手的操作序列)
+        Player me,you;
+        if(player.getId().equals(playerA.getId())){
+            me = playerA;
+            you = playerB;
+        }else {
+            me = playerB;
+            you = playerA;
+        }
+        return getMapString() + "#"
+                + me.getSx() + "#"
+                +me.getSy()+ "#"
+                + "(" + me.getStepString() + ")#"
+                + you.getSx() + "#"
+                + you.getSy() + "#"
+                + "(" + you.getStepString() + ")";
+    }
+    // 发送bot信息给botrunning服务
+    public void sendBotCode(Player player) {
+
+        // 如果botId为-1 则为人工手动操作 直接退出函数
+        if(player.getBotId().equals(-1)){
+            return;
+        }
+        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
+        data.add("user_id", player.getId().toString());
+        data.add("bot_code", player.getBotCode());
+        data.add("input",getInput(player));
+
+        WebSocketServer.restTemplate.postForObject(addBotUrl,data,String.class);
+    }
+    // 获取下一步输入
     public boolean nextStep() {
         try {
-            Thread.sleep(200);     // 因为前端每秒渲染五格  所以要休眠最短 200ms
+            Thread.sleep(200);
+            // 因为前端每秒渲染五格  所以要休眠最短 200ms
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        for(int i=0;i < 50; i++){
+        sendBotCode(playerA);
+        sendBotCode(playerB);
+        for(int i=0;i < 50 ; i++){
             try {
-                Thread.sleep(100);  // 如果5s之后还未输入就判失败，  可以增大循环次数减小sleep时间来优化用户体验
+                Thread.sleep(100);
+                // 如果5s之后还未输入就判失败，  可以增大循环次数减小sleep时间来优化用户体验
 
                 lock.lock();
                 try{
@@ -213,7 +267,6 @@ public class Game extends Thread{
     private boolean check_valid(List<Cell> cellsA,List<Cell> cellsB){ //
         int n = cellsA.size();
         Cell cell = cellsA.get(n-1);  // 取出头节点
-        System.out.println(cell);
         if(g[cell.x][cell.y] == 1){  // 判断头节点是否合法
             return false;
         }
@@ -248,6 +301,11 @@ public class Game extends Thread{
     }
     @Override
     public void run() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         for(int i=0;i < 1000; i++){  // 13*14格子，最多600步，这里循环1000回合防止出现意外
             if (nextStep()) {
                 judge();

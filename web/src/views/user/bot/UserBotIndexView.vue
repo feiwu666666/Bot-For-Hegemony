@@ -1,3 +1,10 @@
+<!--
+ * @Author: Cyan_Breeze
+ * @Description:
+ * @Date: 2022-09-20 22:18:21
+ * @LastEditTime: 2022-12-05 08:55:13
+ * @FilePath: \web\src\views\user\bot\UserBotIndexView.vue
+-->
 <template>
     <div class="container">
         <div class="row">
@@ -67,7 +74,7 @@
                                     <td>
                                         {{bot.title}}
                                     </td>
-                                    <td> 
+                                    <td>
                                         {{bot.createtime}}
                                     </td>
                                     <td>
@@ -134,10 +141,10 @@ export default{
     },
     setup(){
         ace.config.set(
-            "basePath", 
+            "basePath",
             "https://cdn.jsdelivr.net/npm/ace-builds@" + require('ace-builds').version + "/src-noconflict/"
-        );
-        const store = useStore();
+        )
+        const store = useStore()
         let bots = ref([]);
         const botadd = reactive({
             title: "",
@@ -150,9 +157,9 @@ export default{
                 url:'http://127.0.0.1:3000/user/bot/getlist/',
                 type:"get",
                 headers :{
-                    Authorization: "Bearer " + store.state.user.token,                    
+                    Authorization: "Bearer " + store.state.user.token,
                 },
-                 
+
                 success(resp){
                     bots.value = resp;
                 }
@@ -165,7 +172,7 @@ export default{
                 url: 'http://127.0.0.1:3000/user/bot/add/',
                 type: 'post',
                 headers : {
-                    Authorization: "Bearer " + store.state.user.token, 
+                    Authorization: "Bearer " + store.state.user.token,
                 },
                 data:{
                     title: botadd.title,
@@ -194,7 +201,7 @@ export default{
                 url: 'http://127.0.0.1:3000/user/bot/remove/',
                 type: 'post',
                 headers: {
-                    Authorization: "Bearer " + store.state.user.token, 
+                    Authorization: "Bearer " + store.state.user.token,
                 },
                 data:{
                     bot_id: bot.id,
@@ -213,7 +220,7 @@ export default{
                 url: 'http://127.0.0.1:3000/user/bot/update/',
                 type: 'post',
                 headers : {
-                    Authorization: "Bearer " + store.state.user.token, 
+                    Authorization: "Bearer " + store.state.user.token,
                 },
                 data:{
                     bot_id: bot.id,
@@ -223,7 +230,7 @@ export default{
                 },
                 success(resp){
                     if(resp.error_message === "success"){
-                        
+
                         // Modal.getInstance(str).hiden();  // 隐藏状态框
                         Modal.getInstance('#update-bot-modal-' + bot.id).hide();
                         refresh_bots();

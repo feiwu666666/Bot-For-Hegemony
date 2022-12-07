@@ -23,20 +23,17 @@ public class MatchingPool extends Thread{
     private static RestTemplate restTemplate;
     private final static String startGameUrl = "http://127.0.0.1:3000/pk/start/game/";
 
-
-
-
     @Autowired
     public void  setRestTemplate(RestTemplate restTemplate){
         MatchingPool.restTemplate = restTemplate;
     }
 
 
-        public void addPlayer(Integer userId,Integer rating){
+        public void addPlayer(Integer userId,Integer rating, Integer botId){
         // 由于添加玩家涉及到了读写user信息，  run（）函数中涉及到读取user信息，所以会发生读写冲突，需要加锁
         lock.lock();
         try{
-            players.add(new Player(userId,rating,0));
+            players.add(new Player(userId,rating,botId ,0));
         }finally{
             lock.unlock();
         }
@@ -62,11 +59,11 @@ public class MatchingPool extends Thread{
         // 如果分差小于两个玩家最小等待时间*10，即匹配成功
     }
     private void sendResult(Player a,Player b){ // 返回匹配结果
-        System.out.println("sendResult: " + a + " " + b);
         MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
         data.add("a_id",a.getUserId().toString());
+        data.add("a_bot_id",a.getBotId().toString());
         data.add("b_id",b.getUserId().toString());
-        System.out.println(a.getUserId() + b.getUserId());
+        data.add("b_bot_id",b.getBotId().toString());
         restTemplate.postForObject(startGameUrl,data,String.class);
     }
     private void increaseWaitingTime(){ // 如果没有匹配成功，等待时长加一

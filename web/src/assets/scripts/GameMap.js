@@ -20,7 +20,7 @@ export class GameMap extends AcGameObject{
 
         this.inner_walls_count = 20;  // 假设地图中有20个障碍物
         this.walls = []; //墙体
-        
+
         // 注册两个蛇
         this.snakes = [
             new Snake({id:0,color:"#4876EC", r : this.rows-2, c : 1},this),
@@ -30,8 +30,6 @@ export class GameMap extends AcGameObject{
     }
     create_walls() {
         const g = this.store.state.pk.gamemap;
-        console.log(this.store.state.pk.gamemap);
-
         for (let r = 0; r < this.rows; r ++ ) {
             for (let c = 0; c < this.cols; c ++ ) {
                 if (g[r][c]) {
@@ -71,11 +69,11 @@ export class GameMap extends AcGameObject{
         this.ctx.canvas.width = this.L * this.cols;
         this.ctx.canvas.height = this.L * this.rows;
     }
-    
+
      // 判断两条蛇是否都准备好了进入下一回合
     check_ready(){
         for(let snake of this.snakes){
-            if(snake.status !== 'idle') return false;  // 状态不为idle时  不再进行操作    
+            if(snake.status !== 'idle') return false;  // 状态不为idle时  不再进行操作
             if(snake.direction === -1) return false;
         }
         return true;
@@ -102,7 +100,7 @@ export class GameMap extends AcGameObject{
                     return false;
                 }
             }
-            
+
         }
         return true;
 

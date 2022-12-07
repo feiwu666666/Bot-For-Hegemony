@@ -13,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Player{
     private Integer id;
+    private Integer botId;
+    private String botCode;
     private Integer sx;
     private Integer sy;
     private List<Integer> steps;
@@ -29,6 +31,7 @@ public class Player{
         List<Cell> res = new ArrayList<Cell>();
         int[] dx = {-1,0,1,0},dy = {0,1,0,-1};
         int x = sx,y = sy;
+        res.add(new Cell(x,y));
         for(int d: steps){
             x += dx[d];
             y += dy[d];

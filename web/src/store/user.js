@@ -1,3 +1,10 @@
+/*
+ * @Author: Cyan_Breeze
+ * @Description:
+ * @Date: 2022-11-24 17:10:28
+ * @LastEditTime: 2022-12-03 17:56:34
+ * @FilePath: \web\src\store\user.js
+ */
 import $ from 'jquery'
 
 export default({
@@ -11,7 +18,7 @@ export default({
   },
   getters: {
   },
-  
+
   // 用来修改数据
   mutations: {
     updateUser(state,user){
@@ -59,7 +66,7 @@ export default({
             error(resp){
               data.error(resp);
             }
-          }); 
+          });
     },
     getinfo(context,data){
         $.ajax({
