@@ -1,5 +1,6 @@
 package com.example.backend.service.impl.bot;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.backend.mapper.BotMapper;
 import com.example.backend.pojo.Bot;
 import com.example.backend.pojo.User;
@@ -60,6 +61,13 @@ public class AddServiceImpl implements AddService {
         }
         if(description.length() > 10000){
             map.put("error_message","描述过长");
+            return map;
+        }
+        // 统计当前用户拥有的bot数量  每个用户最多拥有10个bot
+        QueryWrapper<Bot> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user.getId());
+        if(botMapper.selectCount(queryWrapper) >= 10){
+            map.put("error_message", "每个用户最多拥有10个Bot！");
             return map;
         }
 

@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-11-24 17:10:28
- * @LastEditTime: 2022-12-07 00:08:48
+ * @LastEditTime: 2022-12-08 17:43:39
  * @FilePath: \web\src\views\pk\PkIndexView.vue
 -->
 <template>
@@ -30,8 +30,9 @@ export default{
         const socketUrl = `ws://127.0.0.1:3000/websocket/${store.state.user.token}/`;
 
         let socket = null;
+        store.commit("updateLoser","none");
 
-
+        store.commit("updateIsRecord", false)
         onMounted(() => {
             store.commit("updateOpponent",{
                 username: "我的对手",
@@ -86,7 +87,6 @@ export default{
 
         }),
         onUnmounted(() => {
-          store.commit("updateLoser","none");
             socket.close();
         })
     }

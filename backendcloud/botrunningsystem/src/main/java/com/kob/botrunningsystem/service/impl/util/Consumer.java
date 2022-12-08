@@ -49,7 +49,6 @@ public class Consumer extends Thread{
         BotInterface botInterface = Reflect.compile("com.kob.botrunningsystem.utils.Bot" + uid,
                 addUid(bot.getBotCode(), uid)
         ).create().get();
-        System.out.println(bot.getInput().split("#")[3].length());
         Integer move_direction = botInterface.nextMove(bot.getInput());
         MultiValueMap<String,String> data = new LinkedMultiValueMap<>();
         data.add("user_id", bot.getUserId().toString());

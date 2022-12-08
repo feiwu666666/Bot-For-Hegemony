@@ -1,3 +1,10 @@
+/*
+ * @Author: Cyan_Breeze
+ * @Description:
+ * @Date: 2022-09-20 22:18:21
+ * @LastEditTime: 2022-12-08 17:26:07
+ * @FilePath: \web\src\store\pk.js
+ */
 
 export default({
   state: {
@@ -17,7 +24,7 @@ export default({
   },
   getters: {
   },
-  
+
   // 用来修改数据
   mutations: {
         updateSocket(state,socket){

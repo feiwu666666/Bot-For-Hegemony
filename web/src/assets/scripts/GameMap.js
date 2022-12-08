@@ -40,24 +40,57 @@ export class GameMap extends AcGameObject{
     }
 
     add_listen_events(){
-        this.ctx.canvas.focus(); // 使canvas聚焦
+        // 每当进入pk页面时  都判断一下 当前对局是否为回放
+        if(this.store.state.record.is_record){
+            // 回放时 每300ms行动一下
+            let k = 0
+            const aSteps = this.store.state.record.a_step
+            const bSteps = this.store.state.record.b_step
+            const [snake0,snake1] = this.snakes
+            const loser = this.store.state.record.record_loser
+            console.log(loser)
+            const interval_id = setInterval(() => {
+                if(k >= aSteps.length - 1){
+                    if(loser === 'all' || loser === 'A'){
+                        snake0.status = 'die'
+                    }
+                    if(loser === 'all' || loser === 'B'){
+                        snake1.status = 'die'
+                    }
+                    // 当步数运行完了之后  结束当前的定时函数
+                    clearInterval(interval_id)
+                    console.log(snake0.status);
+                    console.log(snake1.status)
+                }
+                else{
+                    snake0.set_direction(parseInt(aSteps[k]))
+                    snake1.set_direction(parseInt(bSteps[k]))
+                }
+                k++
+            },300)
+        }else{
+            this.ctx.canvas.focus(); // 使canvas聚焦
 
-        // const [snake0] = this.snakes;
-        this.ctx.canvas.addEventListener("keydown", e => {
-            let d = -1;
-            if (e.key === 'w') d = 0;
-            else if (e.key === 'd') d = 1;
-            else if (e.key === 's') d = 2;
-            else if (e.key === 'a') d = 3;
+            // const [snake0] = this.snakes;
+            // canvas绑定键盘监听事件e
+            this.ctx.canvas.addEventListener("keydown", e => {
+                let d = -1;
+                if (e.key === 'w') d = 0;
+                else if (e.key === 'd') d = 1;
+                else if (e.key === 's') d = 2;
+                else if (e.key === 'a') d = 3;
 
-            if(d >= 0){
-                this.store.state.pk.socket.send(JSON.stringify({
-                    event: "move",
-                    direction: d
-                }))
-            }
-        });
-// canvas绑定键盘监听事件e
+                if(d >= 0){
+                    this.store.state.pk.socket.send(JSON.stringify({
+                        event: "move",
+                        direction: d
+                    }))
+                }
+            });
+        }
+
+
+
     }
     start(){
         this.create_walls();

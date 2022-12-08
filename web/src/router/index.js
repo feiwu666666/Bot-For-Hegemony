@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-05 09:06:45
+ * @LastEditTime: 2022-12-08 14:32:30
  * @FilePath: \web\src\router\index.js
  */
 import { createRouter, createWebHistory } from 'vue-router'
@@ -13,6 +13,7 @@ import RecordIndexView from '../views/record/RecordIndexView.vue'
 import UserBotIndexView from '../views/user/bot/UserBotIndexView.vue'
 import UserAccountRegisterView from '../views/user/account/UserAccountRegisterView'
 import UserAccountLoginView from '../views/user/account/UserAccountLoginView'
+import RecordContentView from '../views/record/RecordContentView'
 import store from '@/store'
 
 const routes = [
@@ -29,6 +30,14 @@ const routes = [
     name:"pk_index",
     component:PkIndexView,
     meta: {
+      requestAuth: true
+    }
+  },
+  {
+    path:"/record/:recordId/",
+    name:"record_content",
+    component: RecordContentView,
+    meta:{
       requestAuth: true
     }
   },

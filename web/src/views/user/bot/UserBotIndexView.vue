@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-05 08:55:13
+ * @LastEditTime: 2022-12-08 12:32:02
  * @FilePath: \web\src\views\user\bot\UserBotIndexView.vue
 -->
 <template>
@@ -78,10 +78,10 @@
                                         {{bot.createtime}}
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-info" style="margin-right: 10px ;" :data-bs-target="'#update-bot-modal-' + bot.id" data-bs-toggle="modal">修改</button>
+                                        <button type="button" class="btn btn-info" style="margin-right: 10px ;" :data-bs-target="'#update-bot-modal' + bot.id" data-bs-toggle="modal">修改</button>
                                         <button type="button" class="btn btn-danger" @click="remove_bot(bot)">删除</button>
                                                             <!-- Modal -->
-                                        <div class="modal fade" :id="'update-bot-modal-' +bot.id" tabindex="-1">
+                                        <div class="modal fade" :id="'update-bot-modal' +bot.id" tabindex="-1">
                                             <div class="modal-dialog modal-xl">
                                                 <div class="modal-content">
                                                 <div class="modal-header">
@@ -237,9 +237,6 @@ export default{
                     }else{
                         bot.error_message = resp.error_message
                     }
-                },
-                error(resp){
-                    console.log(resp);
                 }
             })
         }

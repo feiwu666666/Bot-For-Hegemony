@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.backend.consumer.WebSocketServer;
 import com.example.backend.pojo.Bot;
 import com.example.backend.pojo.Record;
+import com.example.backend.pojo.User;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -204,7 +205,6 @@ public class Game extends Thread{
         }
         return false;
     }
-
     private void sendAllMessage(String message){
         if (WebSocketServer.users.get(playerA.getId()) != null) {
             WebSocketServer.users.get(playerA.getId()).sendMessage(message);
@@ -237,10 +237,33 @@ public class Game extends Thread{
                 res.append(g[i][j]);
             }
         }
+
         return res.toString();
     }
-
+    private void updateRating(Player player, Integer rating){
+        User user = WebSocketServer.userMapper.selectById(player.getId());
+        user.setRating(rating);
+        WebSocketServer.userMapper.updateById(user);
+    }
     private void saveToDatabase(){
+        // 玩家A的天梯分
+        Integer ratingA =WebSocketServer.userMapper.selectById(playerA.getId()).getRating();
+        // 玩家B的天梯分
+        Integer ratingB = WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
+        // 随机生成一个随机数 每局随机加减天梯分  随机值尽量小一点  因为匹配时是按照天梯分进行匹配  两者天梯分差别过大 匹配时间增长
+        Integer randomRating = (int)(Math.random() * 10);
+        System.out.println(randomRating);
+        // 如果一方失败  对应进行加减分  如果是平局的话  则不进行操作
+        if("A".equals(loser)){
+            ratingA -= randomRating;
+            ratingB += randomRating;
+        }else if("B".equals(loser)){
+            ratingA += randomRating;
+            ratingB -= randomRating;
+        }
+        // 将天梯分进行更新
+        updateRating(playerA, ratingA);
+        updateRating(playerB, ratingB);
         Record record = new Record(
                 null,
                 playerA.getId(),

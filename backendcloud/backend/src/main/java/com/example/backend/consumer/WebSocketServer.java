@@ -52,7 +52,7 @@ public class WebSocketServer {
      * 非单例模式下 注入Mapper的方法
      */
     public static RestTemplate restTemplate;
-    private static UserMapper userMapper;
+    public static UserMapper userMapper;
     public static RecordMapper recordMapper;
     public static BotMapper botMapper;
     @Autowired

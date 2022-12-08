@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-06 11:47:13
+ * @LastEditTime: 2022-12-08 00:46:37
  * @FilePath: \web\src\components\MatchGround.vue
 -->
 <template>
@@ -56,7 +56,6 @@ export default {
     let select_bot = ref('-1')
     const click_match_btn = () => {
       if (match_btn_info.value === "开始匹配") {
-        console.log(select_bot.value)
         match_btn_info.value = "取消匹配";
         store.state.pk.socket.send(
           JSON.stringify({
