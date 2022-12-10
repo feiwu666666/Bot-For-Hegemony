@@ -1,3 +1,10 @@
+<!--
+ * @Author: Cyan_Breeze
+ * @Description:
+ * @Date: 2022-09-20 22:18:21
+ * @LastEditTime: 2022-12-10 14:55:47
+ * @FilePath: \web\src\views\user\account\UserAccountRegisterView.vue
+-->
 <template>
     <ContentField>
          <div class="row justify-content-md-center">
@@ -41,7 +48,7 @@ export default{
 
          const register = ()=> {
             $.ajax({
-                url: 'http://127.0.0.1:3000/user/account/register/',
+                url: 'https://app2803.acapp.acwing.com.cn/api/user/account/register/',
                 type: 'post',
                 data:{
                     username: username.value,

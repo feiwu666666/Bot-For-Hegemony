@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-08 12:32:02
+ * @LastEditTime: 2022-12-10 14:50:01
  * @FilePath: \web\src\views\user\bot\UserBotIndexView.vue
 -->
 <template>
@@ -154,7 +154,7 @@ export default{
         })
         const refresh_bots  = () => {
             $.ajax({
-                url:'http://127.0.0.1:3000/user/bot/getlist/',
+                url:'https://app2803.acapp.acwing.com.cn/api/user/bot/getlist/',
                 type:"get",
                 headers :{
                     Authorization: "Bearer " + store.state.user.token,
@@ -169,7 +169,7 @@ export default{
         const add_bot = () => {
             botadd.error_message = "",
             $.ajax({
-                url: 'http://127.0.0.1:3000/user/bot/add/',
+                url: 'https://app2803.acapp.acwing.com.cn/api/user/bot/add/',
                 type: 'post',
                 headers : {
                     Authorization: "Bearer " + store.state.user.token,
@@ -198,7 +198,7 @@ export default{
         }
         const remove_bot = (bot) => {
             $.ajax({
-                url: 'http://127.0.0.1:3000/user/bot/remove/',
+                url: 'https://app2803.acapp.acwing.com.cn/api/user/bot/remove/',
                 type: 'post',
                 headers: {
                     Authorization: "Bearer " + store.state.user.token,
@@ -217,7 +217,7 @@ export default{
         const update_bot = (bot) => {
             botadd.error_message = "",
             $.ajax({
-                url: 'http://127.0.0.1:3000/user/bot/update/',
+                url: 'https://app2803.acapp.acwing.com.cn/api/user/bot/update/',
                 type: 'post',
                 headers : {
                     Authorization: "Bearer " + store.state.user.token,
@@ -232,7 +232,7 @@ export default{
                     if(resp.error_message === "success"){
 
                         // Modal.getInstance(str).hiden();  // 隐藏状态框
-                        Modal.getInstance('#update-bot-modal-' + bot.id).hide();
+                        Modal.getInstance('#update-bot-modal' + bot.id).hide();
                         refresh_bots();
                     }else{
                         bot.error_message = resp.error_message

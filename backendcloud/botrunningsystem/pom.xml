@@ -11,7 +11,10 @@
 
     <groupId>com.kob.botrunningsystem</groupId>
     <artifactId>botrunningsystem</artifactId>
+    <packaging>jar</packaging>
+    <dependencyManagement>
 
+    </dependencyManagement>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.jooq/joor-java-8 -->
         <dependency>
@@ -63,5 +66,31 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--这里写上main方法所在类的路径-->
+                <configuration>
+                    <mainClass>com.kob.botrunningsystem.BotRunningApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

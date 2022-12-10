@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-11-24 17:10:28
- * @LastEditTime: 2022-12-03 17:56:34
+ * @LastEditTime: 2022-12-10 14:49:49
  * @FilePath: \web\src\store\user.js
  */
 import $ from 'jquery'
@@ -46,7 +46,7 @@ export default({
   actions: {
     login(context,data){
         $.ajax({
-            url:"http://127.0.0.1:3000/user/account/token/",
+            url:"https://app2803.acapp.acwing.com.cn/api/user/account/token/",
             type: 'post',
             data: {
               username: data.username,
@@ -70,7 +70,7 @@ export default({
     },
     getinfo(context,data){
         $.ajax({
-            url: "http://127.0.0.1:3000/user/account/info/",
+            url: "https://app2803.acapp.acwing.com.cn/api/user/account/info/",
             type: 'get',
             headers:{
                 //登陆验证

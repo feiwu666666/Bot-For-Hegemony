@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description：排行榜页面
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-09 00:07:33
+ * @LastEditTime: 2022-12-10 14:13:22
  * @FilePath: \web\src\views\ranklist\RanklistIndexView.vue
 -->
 <template>
@@ -92,7 +92,7 @@ export default{
       }
       const pull_page = (page) => {
         $.ajax({
-                url: 'http://127.0.0.1:3000/ranklist/getlist/',
+                url: 'https://app2803.acapp.acwing.com.cn/api/ranklist/getlist/',
                 type: 'post',
                 headers: {
                     Authorization: "Bearer " + store.state.user.token,

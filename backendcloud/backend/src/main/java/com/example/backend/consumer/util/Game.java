@@ -252,7 +252,6 @@ public class Game extends Thread{
         Integer ratingB = WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
         // 随机生成一个随机数 每局随机加减天梯分  随机值尽量小一点  因为匹配时是按照天梯分进行匹配  两者天梯分差别过大 匹配时间增长
         Integer randomRating = (int)(Math.random() * 10);
-        System.out.println(randomRating);
         // 如果一方失败  对应进行加减分  如果是平局的话  则不进行操作
         if("A".equals(loser)){
             ratingA -= randomRating;

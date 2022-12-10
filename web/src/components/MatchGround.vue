@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-08 00:46:37
+ * @LastEditTime: 2022-12-10 14:12:11
  * @FilePath: \web\src\components\MatchGround.vue
 -->
 <template>
@@ -74,7 +74,7 @@ export default {
     };
     const refresh_bots  = () => {
       $.ajax({
-          url:'http://127.0.0.1:3000/user/bot/getlist/',
+          url:'https://app2803.acapp.acwing.com.cn/api/user/bot/getlist/',
           type:"get",
           headers :{
               Authorization: "Bearer " + store.state.user.token,

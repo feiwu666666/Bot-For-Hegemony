@@ -2,13 +2,14 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-11-24 17:10:28
- * @LastEditTime: 2022-12-08 17:43:39
+ * @LastEditTime: 2022-12-10 14:13:15
  * @FilePath: \web\src\views\pk\PkIndexView.vue
 -->
 <template>
     <PlayGround v-if="$store.state.pk.status === 'playing'" />
     <MatchGround v-if="$store.state.pk.status === 'matching'" />
     <ResultBoard v-if="$store.state.pk.loser !== 'none'" />
+
 </template>
 
 <script>
@@ -27,7 +28,7 @@ export default{
     setup(){
         const store = useStore();
         // 访问后端3000 端口  websocket服务
-        const socketUrl = `ws://127.0.0.1:3000/websocket/${store.state.user.token}/`;
+        const socketUrl = `wss://app2803.acapp.acwing.com.cn/websocket/${store.state.user.token}/`;
 
         let socket = null;
         store.commit("updateLoser","none");
@@ -94,5 +95,4 @@ export default{
 </script>
 
 <style scoped>
-
 </style>
