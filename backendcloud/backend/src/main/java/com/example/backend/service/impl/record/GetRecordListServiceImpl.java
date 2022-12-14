@@ -42,6 +42,7 @@ public class GetRecordListServiceImpl implements GetRecordListService {
             item.put("a_photo", userA.getPhoto());
             item.put("a_username", userA.getUsername());
             item.put("b_photo", userB.getPhoto());
+
             item.put("b_username", userB.getUsername());
             item.put("record", record);
             items.add(item);
