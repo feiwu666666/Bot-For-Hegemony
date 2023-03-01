@@ -4,10 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.backend.consumer.util.Game;
 import com.example.backend.consumer.util.JwtAuthentication;
-import com.example.backend.mapper.BotMapper;
-import com.example.backend.mapper.RecordMapper;
-import com.example.backend.mapper.UserMapper;
+import com.example.backend.mapper.*;
 import com.example.backend.pojo.Bot;
+import com.example.backend.pojo.Message;
 import com.example.backend.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +18,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -55,6 +56,16 @@ public class WebSocketServer {
     public static UserMapper userMapper;
     public static RecordMapper recordMapper;
     public static BotMapper botMapper;
+    public static FriendMapper friendMapper;
+    public static MessageMapper messageMapper;
+    @Autowired
+    public void setFriendMapper(FriendMapper friendMapper){
+        WebSocketServer.friendMapper = friendMapper;
+    }
+    @Autowired
+    public void setMessageMapper(MessageMapper messageMapper) {
+        WebSocketServer.messageMapper = messageMapper;
+    }
     @Autowired
     public void setUserMapper(UserMapper userMapper){
         WebSocketServer.userMapper = userMapper;
@@ -194,14 +205,40 @@ public class WebSocketServer {
             stopMatching();
         }else if("move".equals(event)){
             move(data.getInteger("direction"));
+        }else if("send_message".equals(event)){
+            addChatlog(data);
+            sendMessage(data);
         }
     }
-
+    public void sendMessage(JSONObject data){
+        Integer receiver = data.getInteger("receiverid");
+        WebSocketServer receiver_socket = users.get(receiver);
+        if(receiver_socket == null){
+            return ;
+        }
+        Session receiver_session = receiver_socket.session;
+        data.put("event","send_message");
+        synchronized (receiver_session){
+            if(receiver_session.isOpen()){
+                try {
+                    receiver_session.getBasicRemote().sendText(data.toJSONString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public void addChatlog(JSONObject data){
+        Message message = new Message(data.getBigInteger("sendtime"),
+                data.getInteger("senderid"),data.getInteger("receiverid"),
+                data.getString("sendcontent"),0,
+                0, new Timestamp(data.getLong("sendtime")));
+        messageMapper.insert(message);
+    }
     @OnError
     public void onError(Session session, Throwable error) {
         error.printStackTrace();
     }
-
     public void sendMessage(String message){
         // 给session加上互斥锁，让其他线程等待， 直到事件完成 锁被释放，其他线程才能操作锁中数据
         synchronized (this.session){
