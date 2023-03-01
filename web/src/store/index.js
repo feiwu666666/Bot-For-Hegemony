@@ -2,13 +2,14 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-08 15:09:15
+ * @LastEditTime: 2023-02-18 22:09:49
  * @FilePath: \web\src\store\index.js
  */
 import { createStore } from 'vuex'
 import ModuleUser from './user'
 import ModulePk from './pk'
 import ModuleRecord from './record'
+import ModuleChat from './chat'
 
 export default createStore({
   state: {
@@ -22,6 +23,7 @@ export default createStore({
   modules: {
     user: ModuleUser,
     pk:ModulePk,
-    record: ModuleRecord
+    record: ModuleRecord,
+    chat: ModuleChat
   }
 })

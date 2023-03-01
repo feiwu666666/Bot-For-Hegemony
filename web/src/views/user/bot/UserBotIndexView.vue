@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-14 23:07:44
+ * @LastEditTime: 2023-02-20 21:50:28
  * @FilePath: \web\src\views\user\bot\UserBotIndexView.vue
 -->
 <template>
@@ -49,6 +49,7 @@
                         <span style="font-size:145%; " >我的Bot</span>
                         <button type="button" class="btn btn-primary" style="float:right" data-bs-toggle="modal" data-bs-target="#add-bot-btn">添加Bot</button>
                     </div>
+
                     <!-- Modal -->
                     <div class="modal fade" id="add-bot-btn" tabindex="-1">
                         <div class="modal-dialog modal-xl">
@@ -148,6 +149,8 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 </template>
 
@@ -179,8 +182,9 @@ export default{
         })
         const new_head = ref('')
         const refresh_bots  = () => {
+          console.log("flash")
             $.ajax({
-                url:'https://app2803.acapp.acwing.com.cn/api/user/bot/getlist/',
+                url:'http://127.0.0.1:3000/user/bot/getlist/',
                 type:"get",
                 headers :{
                     Authorization: "Bearer " + store.state.user.token,
@@ -195,7 +199,7 @@ export default{
         const add_bot = () => {
             botadd.error_message = "",
             $.ajax({
-                url: 'https://app2803.acapp.acwing.com.cn/api/user/bot/add/',
+                url: 'http://127.0.0.1:3000/user/bot/add/',
                 type: 'post',
                 headers : {
                     Authorization: "Bearer " + store.state.user.token,
@@ -224,7 +228,7 @@ export default{
         }
         const update_head = () => {
             $.ajax({
-                url: 'https://app2803.acapp.acwing.com.cn/api/user/account/updateHead/',
+                url: 'http://127.0.0.1:3000/user/account/updateHead/',
                 type: 'post',
                 headers : {
                     Authorization: "Bearer " + store.state.user.token,
@@ -247,7 +251,7 @@ export default{
         }
         const remove_bot = (bot) => {
             $.ajax({
-                url: 'https://app2803.acapp.acwing.com.cn/api/user/bot/remove/',
+                url: 'http://127.0.0.1:3000/user/bot/remove/',
                 type: 'post',
                 headers: {
                     Authorization: "Bearer " + store.state.user.token,
@@ -266,7 +270,7 @@ export default{
         const update_bot = (bot) => {
             botadd.error_message = "",
             $.ajax({
-                url: 'https://app2803.acapp.acwing.com.cn/api/user/bot/update/',
+                url: 'http://127.0.0.1:3000/user/bot/update/',
                 type: 'post',
                 headers : {
                     Authorization: "Bearer " + store.state.user.token,

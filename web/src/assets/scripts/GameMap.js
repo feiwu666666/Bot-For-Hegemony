@@ -26,7 +26,6 @@ export class GameMap extends AcGameObject{
             new Snake({id:0,color:"#4876EC", r : this.rows-2, c : 1},this),
             new Snake({id:1,color:"#F94848",r : 1,c : this.cols-2},this)
         ];
-
     }
     create_walls() {
         const g = this.store.state.pk.gamemap;
@@ -48,7 +47,6 @@ export class GameMap extends AcGameObject{
             const bSteps = this.store.state.record.b_step
             const [snake0,snake1] = this.snakes
             const loser = this.store.state.record.record_loser
-            console.log(loser)
             const interval_id = setInterval(() => {
                 if(k >= aSteps.length - 1){
                     if(loser === 'all' || loser === 'A'){
@@ -59,8 +57,6 @@ export class GameMap extends AcGameObject{
                     }
                     // 当步数运行完了之后  结束当前的定时函数
                     clearInterval(interval_id)
-                    console.log(snake0.status);
-                    console.log(snake1.status)
                 }
                 else{
                     snake0.set_direction(parseInt(aSteps[k]))
@@ -81,7 +77,7 @@ export class GameMap extends AcGameObject{
                 else if (e.key === 'a') d = 3;
 
                 if(d >= 0){
-                    this.store.state.pk.socket.send(JSON.stringify({
+                    this.store.state.user.socket.send(JSON.stringify({
                         event: "move",
                         direction: d
                     }))

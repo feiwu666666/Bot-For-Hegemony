@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-09 23:00:10
+ * @LastEditTime: 2023-03-01 11:56:52
  * @FilePath: \web\src\components\PlayGround.vue
 -->
 <template>
@@ -43,11 +43,12 @@ div.playground{
     margin: 40px auto;
 }
 div.legend{
-    font-size: xx-large;
-
+    font-size: 2.6vh;
+    height: 7vh;
+    width: 10vw;
     position: absolute;
-    top:230px;
-    left: 200px;
+    top:40vh;
+    left: 10vw;
 }
 .legend > .me{
     padding-bottom: 20px;
@@ -58,16 +59,16 @@ div.legend{
 .me-color{
     margin-left: 10px;
     position: relative;
-    transform: translateY(35%);
+    transform: translateY(-15%);
     float: right;
-    width: 50px;
-    height: 30px;
+    width: 5vw;
+    height: 7vh;
 }
 .you-color{
-    width: 50px;
-    height: 30px;
+    width: 5vw;
+    height: 7vh;
     float: right;
     position: relative;
-    transform: translateY(35%);
+    transform: translateY(-15%);
 }
 </style>

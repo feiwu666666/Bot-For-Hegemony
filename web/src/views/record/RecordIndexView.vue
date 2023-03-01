@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-10 14:49:58
+ * @LastEditTime: 2023-02-20 11:57:26
  * @FilePath: \web\src\views\record\RecordIndexView.vue
 -->
 <template>
@@ -108,7 +108,7 @@ export default{
       }
       const pull_page = (page) => {
         $.ajax({
-                url: 'https://app2803.acapp.acwing.com.cn/api/record/getlist/',
+                url: 'http://127.0.0.1:3000/record/getlist/',
                 type: 'post',
                 headers: {
                     Authorization: "Bearer " + store.state.user.token,

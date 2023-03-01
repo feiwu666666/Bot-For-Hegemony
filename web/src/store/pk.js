@@ -2,14 +2,14 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-08 17:26:07
+ * @LastEditTime: 2023-02-19 23:16:09
  * @FilePath: \web\src\store\pk.js
  */
 
 export default({
   state: {
     status: "matching", // matching表示匹配界面，playing表示对战界面
-    socket: null,
+    // socket: null,  // socket转移之user中  实现聊天室即时通讯
     opponent_username: "", // 对手的用户名
     opponent_photo: "", // 对手的头像
     gamemap: null,
@@ -27,9 +27,9 @@ export default({
 
   // 用来修改数据
   mutations: {
-        updateSocket(state,socket){
-            state.socket = socket;
-        },
+        // updateSocket(state,socket){
+        //     state.socket = socket;
+        // },
         updateOpponent(state,opponent){
             state.opponent_username = opponent.username;
             state.opponent_photo = opponent.photo;

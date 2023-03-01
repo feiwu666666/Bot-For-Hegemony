@@ -1,8 +1,8 @@
 <!--
  * @Author: Cyan_Breeze
- * @Description:
+ * @Description:匹配面板
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-10 14:12:11
+ * @LastEditTime: 2023-02-20 11:58:07
  * @FilePath: \web\src\components\MatchGround.vue
 -->
 <template>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
 import { useStore } from "vuex";
 import $ from 'jquery'
 
@@ -57,7 +57,7 @@ export default {
     const click_match_btn = () => {
       if (match_btn_info.value === "开始匹配") {
         match_btn_info.value = "取消匹配";
-        store.state.pk.socket.send(
+        store.state.user.socket.send(
           JSON.stringify({
             event: "start-matching",
             bot_id: select_bot.value
@@ -65,7 +65,7 @@ export default {
         );
       } else {
         match_btn_info.value = "开始匹配";
-        store.state.pk.socket.send(
+        store.state.user.socket.send(
           JSON.stringify({
             event: "stop-matching",
           })
@@ -74,7 +74,8 @@ export default {
     };
     const refresh_bots  = () => {
       $.ajax({
-          url:'https://app2803.acapp.acwing.com.cn/api/user/bot/getlist/',
+          // url:'https://app2803.acapp.acwing.com.cn/api/user/bot/getlist/',
+          url:'http://127.0.0.1:3000/user/bot/getlist/',
           type:"get",
           headers :{
               Authorization: "Bearer " + store.state.user.token,
@@ -85,6 +86,13 @@ export default {
           }
       });
     }
+    onUnmounted(() => {
+      store.state.user.socket.send(
+        JSON.stringify({
+          event: "stop-matching",
+        })
+      )
+    })
     refresh_bots()
     return {
       match_btn_info,

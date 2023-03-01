@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-05 13:13:23
+ * @LastEditTime: 2023-02-20 21:57:54
  * @FilePath: \web\src\views\user\account\UserAccountLoginView.vue
 -->
 <template>
@@ -44,6 +44,7 @@ export default{
         let password = ref('');
         let error_message = ref('');
         const jwt_token = localStorage.getItem("jwt_token");
+        console.log("登陸前")
         if(jwt_token){
             store.commit("updateToken",jwt_token);
             store.dispatch("getinfo",{
@@ -70,7 +71,6 @@ export default{
                         success(){
                             // 登陆成功之后，获取用户信息之后  自动跳转至'Home'页面
                             router.push({name: 'home'})
-                            // console.log(store.state.user)
                         }
                     })
                 },
