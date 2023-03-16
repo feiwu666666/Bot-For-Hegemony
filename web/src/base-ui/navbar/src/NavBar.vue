@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:导航栏
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2023-03-01 16:53:40
+ * @LastEditTime: 2023-03-02 14:06:10
  * @FilePath: \web\src\base-ui\navbar\src\NavBar.vue
 -->
 <template>
@@ -33,7 +33,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="margin-left:78%">
                       <li>
-                        <router-link :class="route_name=='user_info_index'?'dropdown-item active':'dropdown-item'" :to="{name:'user_bot_index',params:$store.state.user.id}" >个人信息</router-link>
+                        <router-link :class="route_name=='user_info_index'?'dropdown-item active':'dropdown-item'" :to="{name:'user_info',params:{userId:$store.state.user.id}}" >个人信息</router-link>
                       </li>
                       <li>
                         <router-link :class="route_name=='user_bot_index'?'dropdown-item active':'dropdown-item'" :to="{name:'user_bot_index'}" >我的Bot</router-link>

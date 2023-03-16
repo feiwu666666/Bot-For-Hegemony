@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-11-24 17:10:28
- * @LastEditTime: 2023-02-25 20:18:37
+ * @LastEditTime: 2023-03-02 13:58:47
  * @FilePath: \web\src\views\pk\PkIndexView.vue
 -->
 <template>
@@ -80,7 +80,8 @@ export default{
                     //  角色死亡默认游戏结束 状态进入匹配状态
                     store.commit("updateStates","matching")
                     // 如果是好友发送回来的信息 则将其保存进store的聊天记录中
-                }else if(data.event === "receive_message"){
+                }
+                if(data.super_event === "send_message"){
                   console.log(data)
                   store.dispatch("addchatlog",{
                     sendtime: data.sendtime,

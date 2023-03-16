@@ -13,7 +13,7 @@ import java.util.List;
 public class GetMessageListController {
     @Autowired
     private GetMessageListService getMessageListService;
-    @GetMapping("/user/friend/getchatlog/")
+    @GetMapping("/api/user/friend/getchatlog/")
     public List<Message> getChatlog(){
         return getMessageListService.getMessageList();
     }

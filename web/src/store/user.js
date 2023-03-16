@@ -143,29 +143,6 @@ export default({
             console.log(resp)
           }
         })
-        // $.ajax({
-        //     url: "http://127.0.0.1:3000/user/account/info/",
-        //     type: 'get',
-        //     headers:{
-        //         //登陆验证
-        //         Authorization:  "Bearer " + context.state.token,
-        //     },
-        //     success(resp){
-        //         if(resp.error_message === "success"){
-        //             context.commit("updateUser",{
-        //                 ...resp,
-        //                 is_login: true
-        //             })
-
-        //             data.success(resp);
-        //         }else{
-        //             data.error(resp);
-        //         }
-        //     },
-        //     error(resp){
-        //         data.error(resp);
-        //     },
-        // });
         console.log("login success")
 
     },

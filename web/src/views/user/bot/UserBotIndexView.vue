@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2023-02-20 21:50:28
+ * @LastEditTime: 2023-03-04 14:42:45
  * @FilePath: \web\src\views\user\bot\UserBotIndexView.vue
 -->
 <template>
@@ -16,29 +16,6 @@
                         <div class="username-display">{{ $store.state.user.username }}
                         </div>
                         <hr />
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ChangePhotoModal" style="float:right">更改头像</button>
-                    </div>
-                    <div class="modal fade" id="ChangePhotoModal" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">更改头像</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                <div class="mb-3">
-                                    <label for="head-sculpture" class="col-form-label">请输入图像的地址</label>
-                                    <textarea class="form-control" id="head-sculpture" v-model="new_head"></textarea>
-                                </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                <button type="button" class="btn btn-primary" @click="update_head">确认更改</button>
-                            </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -226,29 +203,6 @@ export default{
                 }
             })
         }
-        const update_head = () => {
-            $.ajax({
-                url: 'http://127.0.0.1:3000/user/account/updateHead/',
-                type: 'post',
-                headers : {
-                    Authorization: "Bearer " + store.state.user.token,
-                },
-                data:{
-                    new_head: new_head.value
-                },
-                success(resp){
-                    if(resp.error_message === "success"){
-
-                        store.state.user.photo = new_head.value
-                        new_head.value = ""
-                        Modal.getInstance("#ChangePhotoModal").hide();
-                    }
-                },
-                error(resp){
-                    console.log(resp)
-                }
-            })
-        }
         const remove_bot = (bot) => {
             $.ajax({
                 url: 'http://127.0.0.1:3000/user/bot/remove/',
@@ -294,7 +248,7 @@ export default{
             })
         }
         return {
-            bots,botadd,add_bot,remove_bot,update_bot,new_head,update_head
+            bots,botadd,add_bot,remove_bot,update_bot,new_head
         }
     }
 }

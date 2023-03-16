@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:聊天框实现
  * @Date: 2023-01-02 18:29:09
- * @LastEditTime: 2023-02-28 19:46:56
+ * @LastEditTime: 2023-03-02 13:49:56
  * @FilePath: \web\src\components\chat\src\chat-element\chat-content.vue
 -->
 <template>
@@ -114,7 +114,7 @@ export default {
           messageType: 0
         })
         socket.send(JSON.stringify({
-          event: 'send_message',
+          super_event: 'send_message',
           sendtime: (new Date()).valueOf(),
           senderid:store.state.user.id,
           receiverid:props.receiverId,

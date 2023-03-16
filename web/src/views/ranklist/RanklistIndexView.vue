@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description：排行榜页面
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2022-12-30 18:26:49
+ * @LastEditTime: 2023-03-05 22:45:35
  * @FilePath: \web\src\views\ranklist\RanklistIndexView.vue
 -->
 <template>
@@ -18,7 +18,9 @@
           <tbody>
             <tr v-for="user in users" :key="user.id">
               <td>
-                <img :src="user.photo" alt="图片加载失败" class="user-photo" loading="lazy"/>
+                <router-link :to="{name: 'user_info',params:{userId: user.id}}">
+                  <img :src="user.photo" alt="图片加载失败" class="user-photo" loading="lazy"/>
+                </router-link>
                 &nbsp;
                 <span class="user-username">{{user.username}}</span>
               </td>

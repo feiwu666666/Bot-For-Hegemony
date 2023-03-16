@@ -70,7 +70,7 @@ public class RegisterServiceImpl implements RegisterService {
         String encode = passwordEncoder.encode(password);
         String photo = "https://cdn.acwing.com/media/user/profile/photo/63997_lg_8aaf892643.jpg";
         // 创建一个user
-        User user = new User(null,username,encode,photo,1500);
+        User user = new User(null,username,encode,photo,1500,0);
         // 将user插入到数据库中
         userMapper.insert(user);
 

@@ -202,10 +202,11 @@ public class WebSocketServer {
         if("start-matching".equals(event)){
             startMatching(data.getInteger("bot_id"));
         }else if("stop-matching".equals(event)){
+            System.out.println("即将停止");
             stopMatching();
         }else if("move".equals(event)){
             move(data.getInteger("direction"));
-        }else if("send_message".equals(event)){
+        }else if("send_message".equals(data.getString("super_event"))){
             addChatlog(data);
             sendMessage(data);
         }
@@ -217,7 +218,7 @@ public class WebSocketServer {
             return ;
         }
         Session receiver_session = receiver_socket.session;
-        data.put("event","send_message");
+        data.put("super_event","send_message");
         synchronized (receiver_session){
             if(receiver_session.isOpen()){
                 try {

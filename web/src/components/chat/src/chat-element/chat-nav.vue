@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:  聊天导航栏
  * @Date: 2023-01-02 18:28:42
- * @LastEditTime: 2023-02-28 23:41:43
+ * @LastEditTime: 2023-03-07 22:22:01
  * @FilePath: \web\src\components\chat\src\chat-element\chat-nav.vue
 -->
 <template>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 
 
@@ -47,10 +47,13 @@ export default {
   emits:['handleSelect'],
   setup(props,{ emit }){
     const store = useStore()
-    console.log(store)
     const friendList = ref([])
-    console.log(store.state.user.friends)
-    friendList.value = store.state.user.friends
+
+    watchEffect(() => {
+      friendList.value = store.state.user.friends
+      emit('handleSelect',null)
+    })
+
     const select_friend = (id) => {
       emit('handleSelect',id)
       const beforeSelect = document.getElementsByClassName('friends')

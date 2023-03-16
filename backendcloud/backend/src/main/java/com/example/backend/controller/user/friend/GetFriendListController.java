@@ -12,7 +12,7 @@ import java.util.List;
 public class GetFriendListController {
     @Autowired
     private GetFriendListService getFriendListService;
-    @GetMapping("/user/friend/friendlist/")
+    @GetMapping("/api/user/friend/friendlist/")
     public List<Friend> getfriendlist(){
         return getFriendListService.getFriendList();
     }

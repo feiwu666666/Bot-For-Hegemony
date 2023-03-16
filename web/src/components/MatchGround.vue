@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:匹配面板
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2023-02-20 11:58:07
+ * @LastEditTime: 2023-03-05 12:15:21
  * @FilePath: \web\src\components\MatchGround.vue
 -->
 <template>
@@ -87,11 +87,13 @@ export default {
       });
     }
     onUnmounted(() => {
-      store.state.user.socket.send(
-        JSON.stringify({
-          event: "stop-matching",
-        })
-      )
+      if(match_btn_info.value === "取消匹配"){
+        store.state.user.socket.send(
+          JSON.stringify({
+            event: "stop-matching",
+          })
+        )
+      }
     })
     refresh_bots()
     return {

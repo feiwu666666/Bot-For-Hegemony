@@ -21,3 +21,5 @@ public class ReceiveBotMoveController {
         return receiveBotMoveService.receiveBotMove(userId, direction);
     }
 }
+
+

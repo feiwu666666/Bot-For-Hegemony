@@ -2,7 +2,7 @@
  * @Author: Cyan_Breeze
  * @Description:
  * @Date: 2022-09-20 22:18:21
- * @LastEditTime: 2023-02-20 11:57:26
+ * @LastEditTime: 2023-03-07 23:03:09
  * @FilePath: \web\src\views\record\RecordIndexView.vue
 -->
 <template>
@@ -19,16 +19,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="record in records" :key="record.record.id">
+            <tr v-for="record in records" :key="record.id">
               <td>
-                <img :src="record.a_photo" alt="图片加载失败" class="record-user-photo"/>
-                &nbsp;
-                <span class="record-user-username">{{record.a_username}}</span>
+                  <router-link :to="{name: 'user_info',params:{userId:record.record.aid}}">
+                    <img :src="record.a_photo" alt="图片加载失败" class="record-user-photo"/>
+                    &nbsp;
+                    <span class="record-user-username">{{record.a_username}}</span>
+                  </router-link>
               </td>
               <td>
-                <img :src="record.b_photo" alt="图片加载失败" class="record-user-photo"/>
-                &nbsp;
-                <span class="record-user-username">{{record.b_username}}</span>
+                  <router-link :to="{name: 'user_info',params:{userId:record.record.bid}}">
+                    <img :src="record.b_photo" alt="图片加载失败" class="record-user-photo"/>
+                    &nbsp;
+                    <span class="record-user-username">{{record.b_username}}</span>
+                  </router-link>
               </td>
               <td>
                 <div v-if="record.record.loser === 'A'"> 玩家2胜</div>
@@ -185,5 +189,12 @@ export default{
 .record-user-photo{
   width: 5vh;
   border-radius: 50%;
+}
+a{
+  text-decoration: none;
+  color: black;
+}
+router-link{
+  text-decoration: none;
 }
 </style>

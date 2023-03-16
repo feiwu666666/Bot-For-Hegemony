@@ -15,7 +15,7 @@ public class updateHeadController {
     @Autowired
     UpdateHeadService updateHeadService;
 
-    @PostMapping("/user/account/updateHead")
+    @PostMapping("/api/user/account/updateHead/")
     public Map<String,String> updateHead(@RequestParam Map<String,String> data){
         Map<String,String> map = new LinkedHashMap<>();
         // 获取前端传来的图片地址
